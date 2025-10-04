@@ -91,18 +91,122 @@
   const userInput = document.getElementById('user-input');
   const sendBtn = document.getElementById('send-btn');
 
-  // Predefined question-answer pairs (lowercase keys for matching)
   const predefinedQA = {
-    "what is pi?": "Pi (π) is approximately 3.14159, the ratio of a circle's circumference to its diameter.",
-    "how do i calculate the area of a circle?": "Area of a circle = π × radius².",
-    "what is the pythagorean theorem?": "In a right triangle: a² + b² = c², where c is the hypotenuse.",
-    "what is factorial?": "Factorial of n (n!) is the product of all positive integers up to n.",
-    "how do i find the square root of a number?": "The square root of x is a number which, when multiplied by itself, gives x.",
-    "what is the quadratic formula?": "For ax² + bx + c = 0, roots = (-b ± √(b²-4ac)) / (2a).",
-    "who discovered calculus?": "Calculus was developed independently by Isaac Newton and Gottfried Wilhelm Leibniz."
-  };
+  "what is pi?": "Pi (π) is approximately 3.14159, the ratio of a circle's circumference to its diameter.",
+  "how do i calculate the area of a circle?": "Area of a circle = π × radius².",
+  "what is the pythagorean theorem?": "In a right triangle: a² + b² = c², where c is the hypotenuse.",
+  "what is factorial?": "Factorial of n (n!) is the product of all positive integers up to n.",
+  "how do i find the square root of a number?": "The square root of x is a number which, when multiplied by itself, gives x.",
+  "what is the quadratic formula?": "For ax² + bx + c = 0, roots = (-b ± √(b²-4ac)) / (2a).",
+  "who discovered calculus?": "Calculus was developed independently by Isaac Newton and Gottfried Wilhelm Leibniz.",
+  "what is the derivative?": "The derivative measures how a function changes as its input changes — rate of change or slope.",
+  "what is an integral?": "An integral represents the area under a curve or the accumulation of quantities.",
+  "how do i calculate the perimeter of a rectangle?": "Perimeter = 2 × (length + width).",
+  "what is the formula for the area of a triangle?": "Area = ½ × base × height.",
+  "what is the fibonacci sequence?": "A sequence where each number is the sum of the two preceding ones, starting with 0 and 1.",
+  "how do i convert degrees to radians?": "Multiply degrees by π / 180 to get radians.",
+  "how do i convert radians to degrees?": "Multiply radians by 180 / π to get degrees.",
+  "what is a prime number?": "A prime number is a natural number greater than 1 that has no positive divisors other than 1 and itself.",
+  "what is the law of sines?": "In any triangle, a/sin(A) = b/sin(B) = c/sin(C).",
+  "what is the law of cosines?": "c² = a² + b² - 2ab × cos(C) relates sides and angles in a triangle.",
+  "what is the difference between permutation and combination?": "Permutation counts ordered arrangements; combination counts unordered selections.",
+  "how do i calculate combinations?": "Number of combinations = n! / (r! × (n - r)!).",
+  "how do i calculate permutations?": "Number of permutations = n! / (n - r)!.",
+  "what is an irrational number?": "A number that cannot be expressed as a simple fraction — its decimal goes on forever without repeating.",
+  "what is the golden ratio?": "Approximately 1.618, an irrational number often found in nature and art.",
+  "what is a complex number?": "A number with a real and an imaginary part, written as a + bi.",
+  "how do i add complex numbers?": "Add real parts and add imaginary parts separately.",
+  "what is an imaginary number?": "A number that when squared gives a negative result, denoted as i where i² = -1.",
+  "what is the standard form of a line equation?": "Ax + By = C, where A, B, and C are constants.",
+  "what is the slope-intercept form?": "y = mx + b, where m is slope and b is y-intercept.",
+  "what is a function?": "A relation where each input has exactly one output.",
+  "what is domain in math?": "All possible input values of a function.",
+  "what is range in math?": "All possible output values of a function.",
+  "what is an asymptote?": "A line that a graph approaches but never touches.",
+  "how do i calculate the volume of a cylinder?": "Volume = π × radius² × height.",
+  "how do i calculate the volume of a sphere?": "Volume = 4/3 × π × radius³.",
+  "what is the difference between mean, median, and mode?": "Mean is average, median is middle value, mode is most frequent value.",
+  "what is the binomial theorem?": "It gives the expansion of (a + b)^n for any integer n ≥ 0.",
+  "what is a matrix?": "A rectangular array of numbers arranged in rows and columns.",
+  "how do i multiply matrices?": "Multiply rows of the first matrix by columns of the second and sum products.",
+  "what is a determinant?": "A scalar value computed from a square matrix indicating invertibility.",
+  "what is an eigenvalue?": "A scalar λ where there exists a vector v such that Av = λv for matrix A.",
+  "what is a vector?": "An object with both magnitude and direction.",
+  "what is the difference between scalar and vector?": "Scalar has magnitude only; vector has magnitude and direction.",
+  "how do i calculate distance between two points?": "Distance = √((x2 - x1)² + (y2 - y1)²).",
+  "what is a logarithm?": "The inverse operation to exponentiation, log_b(a) answers: b^x = a.",
+  "what is natural logarithm?": "Logarithm with base e, written as ln(x).",
+  "what is the base of common logarithm?": "10.",
+  "what is the exponential function?": "Function e^x where e is Euler's number (~2.718).",
+  "what is a polynomial?": "An expression with variables and coefficients involving only non-negative integer powers.",
+  "what is the degree of a polynomial?": "The highest power of the variable in the polynomial.",
+  "what is factoring in algebra?": "Breaking an expression into products of simpler expressions.",
+  "how do i solve linear equations?": "Find the value of variable(s) that make the equation true.",
+  "what is the difference between rational and irrational numbers?": "Rational numbers can be expressed as fractions, irrational cannot.",
+  "what is a sequence?": "An ordered list of numbers following a pattern.",
+  "what is an arithmetic sequence?": "Sequence where the difference between terms is constant.",
+  "what is a geometric sequence?": "Sequence where each term is multiplied by a constant ratio.",
+  "how do i calculate the sum of an arithmetic series?": "Sum = n/2 × (first term + last term).",
+  "how do i calculate the sum of a geometric series?": "Sum = a × (1 - r^n) / (1 - r), r ≠ 1.",
+  "what is probability?": "Measure of how likely an event is to occur, between 0 and 1.",
+  "what is a factorial used for?": "Counting permutations and combinations.",
+  "what is a prime factorization?": "Expressing a number as a product of prime numbers.",
+  "how do i simplify an expression?": "Combine like terms and reduce the expression as much as possible.",
+  "what is a rational expression?": "A ratio of two polynomials.",
+  "what is a limit in calculus?": "The value a function approaches as the input approaches some point.",
+  "what is continuity?": "A function is continuous if you can draw it without lifting your pen.",
+  "what is a derivative used for?": "To find rates of change and slopes of curves.",
+  "what is an integral used for?": "To calculate areas and accumulated quantities.",
+  "what is the binomial coefficient?": "Number of ways to choose k elements from n: n! / (k!(n-k)!).",
+  "what is a histogram?": "A graphical representation of data using bars of different heights.",
+  "what is standard deviation?": "A measure of the amount of variation in a set of values.",
+  "what is variance?": "The average of the squared differences from the mean.",
+  "what is the difference between permutation and combination?": "Permutation is order-sensitive, combination is not.",
+  "what is a right angle?": "An angle of exactly 90 degrees.",
+  "what is a reflex angle?": "An angle greater than 180 degrees but less than 360 degrees.",
+  "what is an obtuse angle?": "An angle greater than 90 degrees but less than 180 degrees.",
+  "what is an acute angle?": "An angle less than 90 degrees.",
+  "how do i convert a fraction to a decimal?": "Divide numerator by denominator.",
+  "what is the difference between a ratio and a proportion?": "Ratio compares two quantities, proportion states two ratios are equal.",
+  "what is a linear function?": "A function with graph as a straight line.",
+  "what is a quadratic function?": "A function where the highest power of variable is 2.",
+  "how do i solve quadratic equations?": "Using factoring, completing the square, or quadratic formula.",
+  "what is the binomial expansion of (a+b)^2?": "a² + 2ab + b².",
+  "what is a circle?": "Set of points equidistant from a center point.",
+  "what is the circumference of a circle?": "Circumference = 2π × radius.",
+  "what is the difference between permutations and combinations?": "Permutations consider order; combinations do not.",
+  "what is the difference between a function and a relation?": "A function assigns exactly one output per input; a relation does not require this.",
+  "what is the equation of a parabola?": "y = ax² + bx + c.",
+  "what is the Cartesian coordinate system?": "A system to locate points using x (horizontal) and y (vertical) axes.",
+  "what is the midpoint formula?": "Midpoint = ((x1+x2)/2, (y1+y2)/2).",
+  "what is the binomial theorem used for?": "Expanding powers of binomials.",
+  "what is the law of exponents?": "Rules for multiplying, dividing, and raising powers to powers.",
+  "what is a logarithmic scale?": "A scale that uses logarithms to represent data.",
+  "what is an angle bisector?": "A line dividing an angle into two equal parts.",
+  "what is the volume of a cone?": "Volume = 1/3 × π × radius² × height.",
+  "what is the volume of a pyramid?": "Volume = 1/3 × base area × height.",
+  "what is a tangent line?": "A line that touches a curve at exactly one point.",
+  "what is the inverse function?": "A function that reverses another function's output and input.",
+  "what is a histogram?": "A chart showing the frequency distribution of data.",
+  "what is a percentile?": "Value below which a given percentage of observations fall.",
+  "what is the binomial distribution?": "Probability distribution of the number of successes in fixed number of trials.",
+  "what is the normal distribution?": "A bell-shaped probability distribution that's symmetric about the mean.",
+  "what is skewness?": "Measure of asymmetry in a probability distribution.",
+  "what is kurtosis?": "Measure of the "tailedness" of a probability distribution.",
+  "what is a rational number?": "Any number that can be expressed as a fraction of two integers.",
+  "what is the zero product property?": "If ab=0 then either a=0 or b=0.",
+  "what is an identity matrix?": "A square matrix with ones on the diagonal and zeros elsewhere.",
+  "what is the cross product?": "A vector perpendicular to two given vectors in 3D space.",
+  "what is the dot product?": "Sum of products of corresponding vector components.",
+  "what is cpu": "Also known as central processing unit, is a genral processor.",
+  "what is gpu": "Also known as graphics processing unit, is a graphics processor.",
+  "what is ram": "Random acess memory or ram is a type of volatile storage",
+    "what is ssd": "Solid state drive or ssd is a type of non-volatile storage",
+    "what is hdd": "Hard disk drive or hdd is a type of non-volatile storage"
+};
 
-  // Append message to chat window
+
+
   function appendMessage(text, sender) {
     const msg = document.createElement('div');
     msg.className = `message ${sender}`;
@@ -111,9 +215,50 @@
     chatWindow.scrollTop = chatWindow.scrollHeight;
   }
 
+  function levenshtein(a, b) {
+    const matrix = [];
+    for (let i = 0; i <= b.length; i++) {
+      matrix[i] = [i];
+    }
+    for (let j = 0; j <= a.length; j++) {
+      matrix[0][j] = j;
+    }
+    for (let i = 1; i <= b.length; i++) {
+      for (let j = 1; j <= a.length; j++) {
+        if (b.charAt(i - 1) === a.charAt(j - 1)) {
+          matrix[i][j] = matrix[i - 1][j - 1];
+        } else {
+          matrix[i][j] = Math.min(
+            matrix[i - 1][j - 1] + 1, 
+            matrix[i][j - 1] + 1,     
+            matrix[i - 1][j] + 1    
+          );
+        }
+      }
+    }
+    return matrix[b.length][a.length];
+  }
+
+
+  function findClosestQuestion(input) {
+    const normalizedInput = input.toLowerCase().trim();
+    let closest = null;
+    let minDist = Infinity;
+    for (const question in predefinedQA) {
+      const dist = levenshtein(normalizedInput, question);
+      if (dist < minDist) {
+        minDist = dist;
+        closest = question;
+      }
+    }
+    // Accept match if distance is less than a threshold (e.g., 3 or 25% length)
+    const threshold = Math.min(3, Math.floor(normalizedInput.length * 0.25));
+    return minDist <= threshold ? closest : null;
+  }
+
   // Safe math evaluation using Function (with restrictions)
   function safeEval(expr) {
-    // Only allow digits, operators, parentheses, decimal points, spaces
+    // Only allow digits, operators, parentheses, decimal points, spaces, and some math function names
     if (!/^[0-9+\-*/().\s^%sqrtabsfloorceilround]+$/i.test(expr)) {
       throw new Error("Invalid characters");
     }
@@ -121,28 +266,18 @@
     // Replace ^ with ** for exponentiation
     expr = expr.replace(/\^/g, "**");
 
-    // Support some math functions: sqrt, abs, floor, ceil, round
-    const allowedFunctions = {
-      sqrt: Math.sqrt,
-      abs: Math.abs,
-      floor: Math.floor,
-      ceil: Math.ceil,
-      round: Math.round,
-    };
-
-    // Create a function with allowed functions in scope
+    // Use Math functions safely with 'with' statement
     const func = new Function("Math", "with(Math) { return " + expr + "; }");
     return func(Math);
   }
 
   function processInput(input) {
-    const normalized = input.trim().toLowerCase();
+    let normalized = input.trim().toLowerCase();
 
-    // Check predefined QA first
-    for (const question in predefinedQA) {
-      if (normalized === question) {
-        return predefinedQA[question];
-      }
+    // Try spelling correction first
+    const corrected = findClosestQuestion(normalized);
+    if (corrected) {
+      return predefinedQA[corrected] + " (I understood your question as: \"" + corrected + "\")";
     }
 
     // Try math expression evaluation
