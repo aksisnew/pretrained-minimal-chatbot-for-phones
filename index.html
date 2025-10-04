@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Math Solver Chatbot</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f7f9fc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  #chat-container {
+    width: 400px;
+    height: 600px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  #chat-window {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+  }
+  .message {
+    max-width: 80%;
+    margin-bottom: 12px;
+    padding: 10px 15px;
+    border-radius: 18px;
+    line-height: 1.3;
+    font-size: 14px;
+    word-wrap: break-word;
+  }
+  .user {
+    background: #007bff;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 2px;
+  }
+  .bot {
+    background: #e1e1e1;
+    color: #333;
+    align-self: flex-start;
+    border-bottom-left-radius: 2px;
+  }
+  #input-area {
+    display: flex;
+    border-top: 1px solid #ddd;
+  }
+  #user-input {
+    flex: 1;
+    padding: 12px 15px;
+    border: none;
+    font-size: 16px;
+    outline: none;
+    border-radius: 0 0 0 10px;
+  }
+  #send-btn {
+    padding: 0 20px;
+    background: #007bff;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 0 0 10px 0;
+    transition: background 0.3s;
+  }
+  #send-btn:hover {
+    background: #0056b3;
+  }
+</style>
+</head>
+<body>
+
+<div id="chat-container">
+  <div id="chat-window"></div>
+  <form id="input-area" onsubmit="return false;">
+    <input type="text" id="user-input" autocomplete="off" placeholder="Ask me math questions or type expressions..." />
+    <button id="send-btn">Send</button>
+  </form>
+</div>
+
+<script>
+  const chatWindow = document.getElementById('chat-window');
+  const userInput = document.getElementById('user-input');
+  const sendBtn = document.getElementById('send-btn');
+
+  // Predefined question-answer pairs (lowercase keys for matching)
+  const predefinedQA = {
+    "what is pi?": "Pi (π) is approximately 3.14159, the ratio of a circle's circumference to its diameter.",
+    "how do i calculate the area of a circle?": "Area of a circle = π × radius².",
+    "what is the pythagorean theorem?": "In a right triangle: a² + b² = c², where c is the hypotenuse.",
+    "what is factorial?": "Factorial of n (n!) is the product of all positive integers up to n.",
+    "how do i find the square root of a number?": "The square root of x is a number which, when multiplied by itself, gives x.",
+    "what is the quadratic formula?": "For ax² + bx + c = 0, roots = (-b ± √(b²-4ac)) / (2a).",
+    "who discovered calculus?": "Calculus was developed independently by Isaac Newton and Gottfried Wilhelm Leibniz."
+  };
+
+  // Append message to chat window
+  function appendMessage(text, sender) {
+    const msg = document.createElement('div');
+    msg.className = `message ${sender}`;
+    msg.textContent = text;
+    chatWindow.appendChild(msg);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  }
+
+  // Safe math evaluation using Function (with restrictions)
+  function safeEval(expr) {
+    // Only allow digits, operators, parentheses, decimal points, spaces
+    if (!/^[0-9+\-*/().\s^%sqrtabsfloorceilround]+$/i.test(expr)) {
+      throw new Error("Invalid characters");
+    }
+    
+    // Replace ^ with ** for exponentiation
+    expr = expr.replace(/\^/g, "**");
+
+    // Support some math functions: sqrt, abs, floor, ceil, round
+    const allowedFunctions = {
+      sqrt: Math.sqrt,
+      abs: Math.abs,
+      floor: Math.floor,
+      ceil: Math.ceil,
+      round: Math.round,
+    };
+
+    // Create a function with allowed functions in scope
+    const func = new Function("Math", "with(Math) { return " + expr + "; }");
+    return func(Math);
+  }
+
+  function processInput(input) {
+    const normalized = input.trim().toLowerCase();
+
+    // Check predefined QA first
+    for (const question in predefinedQA) {
+      if (normalized === question) {
+        return predefinedQA[question];
+      }
+    }
+
+    // Try math expression evaluation
+    try {
+      const result = safeEval(input);
+      if (typeof result === "number" && !isNaN(result) && isFinite(result)) {
+        return `The answer is ${result}`;
+      } else {
+        return "Sorry, I couldn't calculate that.";
+      }
+    } catch (e) {
+      return "Sorry, I didn't understand. Please ask a math question or type a math expression.";
+    }
+  }
+
+  function sendMessage() {
+    const userText = userInput.value.trim();
+    if (!userText) return;
+
+    appendMessage(userText, "user");
+    userInput.value = "";
+
+    // Small delay to simulate "thinking"
+    setTimeout(() => {
+      const botReply = processInput(userText);
+      appendMessage(botReply, "bot");
+    }, 300);
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  userInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      sendMessage();
+      e.preventDefault();
+    }
+  });
+
+  // Greeting message on load
+  appendMessage("Hi! I am a math solver bot. Ask me math questions or type expressions like '2+2'.", "bot");
+</script>
+
+</body>
+</html>
