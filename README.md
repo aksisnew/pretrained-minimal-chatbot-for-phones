@@ -1,2 +1,6 @@
 # pretrained-minimal-chatbot-for-phones
-html,css,js based prefedded html css js chatbt
+Python based machine learning projects
+
+## Currently
+- Naive bayes classifier
+- Markov chain generator
