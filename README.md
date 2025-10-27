@@ -5,3 +5,4 @@ Python based machine learning projects
 - Naive bayes classifier
 - Markov chain generator
 - Statistical algorithm powered bots
+- Kormogov based simple minimal text generation from data corpus
