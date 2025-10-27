@@ -1,4 +1,4 @@
-# pretrained-minimal-chatbot-for-phones
+# BASIC STASTICAL ALGORITHiMS USING PYTHON
 Python based machine learning projects
 
 ## Currently
