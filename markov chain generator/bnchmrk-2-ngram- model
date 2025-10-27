@@ -1,0 +1,61 @@
+import re
+import time
+from collections import defaultdict
+import random
+import nltk
+from nltk.util import ngrams
+import numpy as np
+
+class NGramBenchmark:
+    def __init__(self, corpus_file, n=8):
+        self.corpus = open(corpus_file, 'r').read()
+        self.corpus = re.sub(r'\s+', ' ', self.corpus).lower()
+        self.n = n
+        self.model = self.train_model()
+
+    def train_model(self):
+        model = defaultdict(list)
+        n_grams = ngrams(self.corpus, self.n + 1)
+        for gram in n_grams:
+            context = gram[:-1]
+            next_char = gram[-1]
+            model[context].append(next_char)
+        return model
+
+    def generate_text(self, length):
+        context = random.choice(list(self.model.keys()))
+        generated_text = ''.join(context)
+        for _ in range(length - self.n):
+            next_chars = self.model[context]
+            next_char = random.choice(next_chars)
+            generated_text += next_char
+            context = context[1:] + (next_char,)
+        return generated_text
+
+    def benchmark(self, generation_length):
+        start_time = time.time()
+        self.model = self.train_model()
+        train_time = time.time() - start_time
+
+        start_time = time.time()
+        generated_text = self.generate_text(generation_length)
+        generation_time = time.time() - start_time
+
+        metrics = {
+            'Train Time': train_time,
+            'Generation Time': generation_time,
+            'Generated Text Length': len(generated_text)
+        }
+        return metrics
+
+def main():
+    corpus_file = 'corpus.txt'
+    generation_length = 1000
+    benchmark = NGramBenchmark(corpus_file)
+    metrics = benchmark.benchmark(generation_length)
+    print('N-Gram Model Benchmark Results:')
+    for metric, value in metrics.items():
+        print(f'{metric}: {value}')
+
+if __name__ == "__main__":
+    main()
