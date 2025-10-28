@@ -1,0 +1,11 @@
+# Errors and mistakes
+
+
+# Libraries in python to install first for mathbot to work
+
+-> nltk
+-> math
+-> re
+-> ast
+-> operator as op
+-> random
