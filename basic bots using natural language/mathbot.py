@@ -139,6 +139,12 @@ math_functions = {
 'max': lambda *args: max(args),
 'min': lambda *args: min(args),
 'sum': lambda *args: sum(args),
+'prod': lambda *args: math.prod(args),       # Product of all arguments
+    'mean': lambda *args: sum(args)/len(args) if args else 0,  # Average
+    'median': lambda lst: sorted(lst)[len(lst)//2] if lst else 0,  # Median (simple)
+    'count': lambda *args: len(args),           # Number of arguments
+    'abs_sum': lambda *args: sum(abs(x) for x in args),  # Sum of absolute values
+    'range': lambda *args: max(args)-min(args),
 
 
     # --- Other utilities ---
