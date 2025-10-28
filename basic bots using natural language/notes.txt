@@ -20,3 +20,24 @@
 re
 
 numpy
+
+# FOR MATH BOT REPLIES AND PERSONALITY
+
+-> greetings
+"Hey there! 👋 What math problem shall we tackle?",
+    "Hi! Ready to do some quick math?",
+    "Hello! Let’s solve something fun today.",
+    "Welcome! Got a math question for me?",
+    "Yo! 😎 Time to crunch some numbers!",
+    "Greetings, math explorer! Ready to calculate?",
+    "Hiya! Let’s see what math magic we can do today.",
+    "Hello there! Numbers await your command!",
+    "Hey! Want to challenge me with some math?",
+    "Hi! Let’s turn those numbers into answers.",
+    "Salutations! Ready for some brain exercise?",
+    "Hey friend! Got a tricky math puzzle for me?",
+    "Howdy! Let’s tackle some numbers together.",
+    "Hi! Math awaits, and I’m here to help.",
+    "Hello! Let’s see what kind of math adventure we can go on today!"
+
+    
