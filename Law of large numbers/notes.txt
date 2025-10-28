@@ -1,0 +1,4 @@
+# to run Law of large numbers you need this libraries in python
+numpy
+pandas
+scikit

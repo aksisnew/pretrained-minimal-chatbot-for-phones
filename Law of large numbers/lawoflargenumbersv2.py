@@ -1,54 +1,99 @@
 import numpy as np
+import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
+from tqdm import tqdm
 
+# Activation functions
 def sigmoid(x: np.ndarray) -> np.ndarray:
     return 1 / (1 + np.exp(-x))
 
 def sigmoid_derivative(x: np.ndarray) -> np.ndarray:
     return x * (1 - x)
 
-def initialize_weights(input_dim: int, hidden_dim: int, output_dim: int) -> tuple:
-    weights_layer1 = np.random.rand(input_dim, hidden_dim)
-    weights_layer2 = np.random.rand(hidden_dim, output_dim)
-    return weights_layer1, weights_layer2
+def tanh(x: np.ndarray) -> np.ndarray:
+    return np.tanh(x)
 
-def forward_pass(inputs: np.ndarray, weights_layer1: np.ndarray, weights_layer2: np.ndarray) -> tuple:
-    layer1 = sigmoid(np.dot(inputs, weights_layer1))
-    layer2 = sigmoid(np.dot(layer1, weights_layer2))
-    return layer1, layer2
+def tanh_derivative(x: np.ndarray) -> np.ndarray:
+    return 1 - np.power(x, 2)
 
-def backward_pass(inputs: np.ndarray, outputs: np.ndarray, layer1: np.ndarray, layer2: np.ndarray, weights_layer1: np.ndarray, weights_layer2: np.ndarray) -> tuple:
-    layer2_error = outputs - layer2
-    layer2_delta = layer2_error * sigmoid_derivative(layer2)
-    layer1_error = layer2_delta.dot(weights_layer2.T)
-    layer1_delta = layer1_error * sigmoid_derivative(layer1)
-    return layer1_delta, layer2_delta
+class NeuralNetwork:
+    def __init__(self, input_dim: int, hidden_dim: int, output_dim: int, 
+                 activation='sigmoid', learning_rate=0.1, momentum=0.9):
+        np.random.seed(42)
+        self.learning_rate = learning_rate
+        self.momentum = momentum
 
-def update_weights(inputs: np.ndarray, layer1: np.ndarray, layer1_delta: np.ndarray, layer2_delta: np.dot, learning_rate: float, weights_layer1: np.ndarray, weights_layer2: np.ndarray) -> tuple:
-    weights_layer2 += layer1.T.dot(layer2_delta) * learning_rate
-    weights_layer1 += inputs.T.dot(layer1_delta) * learning_rate
-    return weights_layer1, weights_layer2
+        self.weights_layer1 = np.random.randn(input_dim, hidden_dim) * 0.1
+        self.weights_layer2 = np.random.randn(hidden_dim, output_dim) * 0.1
+        self.bias_layer1 = np.zeros((1, hidden_dim))
+        self.bias_layer2 = np.zeros((1, output_dim))
 
-def train_network(inputs: np.ndarray, outputs: np.ndarray, hidden_dim: int, num_iterations: int, learning_rate: float) -> tuple:
-    weights_layer1, weights_layer2 = initialize_weights(inputs.shape[1], hidden_dim, outputs.shape[1])
-    for i in range(num_iterations):
-        layer1, layer2 = forward_pass(inputs, weights_layer1, weights_layer2)
-        layer1_delta, layer2_delta = backward_pass(inputs, outputs, layer1, layer2, weights_layer1, weights_layer2)
-        weights_layer1, weights_layer2 = update_weights(inputs, layer1, layer1_delta, layer2_delta, learning_rate, weights_layer1, weights_layer2)
-        if i % 1000 == 0:
-            print(f"Error after {i} iterations: {np.mean(np.abs(outputs - layer2))}")
-    return weights_layer1, weights_layer2
+        self.activation_name = activation
+        if activation == 'sigmoid':
+            self.activation = sigmoid
+            self.activation_derivative = sigmoid_derivative
+        elif activation == 'tanh':
+            self.activation = tanh
+            self.activation_derivative = tanh_derivative
+        else:
+            raise ValueError("Unsupported activation function")
 
+        # Momentum terms
+        self.v_w1 = np.zeros_like(self.weights_layer1)
+        self.v_w2 = np.zeros_like(self.weights_layer2)
+        self.v_b1 = np.zeros_like(self.bias_layer1)
+        self.v_b2 = np.zeros_like(self.bias_layer2)
+
+    def forward(self, X: np.ndarray) -> tuple:
+        self.layer1 = self.activation(np.dot(X, self.weights_layer1) + self.bias_layer1)
+        self.layer2 = self.activation(np.dot(self.layer1, self.weights_layer2) + self.bias_layer2)
+        return self.layer2
+
+    def backward(self, X: np.ndarray, y: np.ndarray):
+        layer2_error = y - self.layer2
+        layer2_delta = layer2_error * self.activation_derivative(self.layer2)
+
+        layer1_error = layer2_delta.dot(self.weights_layer2.T)
+        layer1_delta = layer1_error * self.activation_derivative(self.layer1)
+
+        return layer1_delta, layer2_delta
+
+    def update_weights(self, X: np.ndarray, layer1_delta: np.ndarray, layer2_delta: np.ndarray):
+        # Momentum update
+        self.v_w2 = self.momentum * self.v_w2 + self.learning_rate * self.layer1.T.dot(layer2_delta)
+        self.v_w1 = self.momentum * self.v_w1 + self.learning_rate * X.T.dot(layer1_delta)
+        self.v_b2 = self.momentum * self.v_b2 + self.learning_rate * np.sum(layer2_delta, axis=0, keepdims=True)
+        self.v_b1 = self.momentum * self.v_b1 + self.learning_rate * np.sum(layer1_delta, axis=0, keepdims=True)
+
+        self.weights_layer2 += self.v_w2
+        self.weights_layer1 += self.v_w1
+        self.bias_layer2 += self.v_b2
+        self.bias_layer1 += self.v_b1
+
+    def train(self, X: np.ndarray, y: np.ndarray, epochs: int = 10000, verbose: bool = True):
+        history = []
+        for i in tqdm(range(epochs), disable=not verbose):
+            self.forward(X)
+            layer1_delta, layer2_delta = self.backward(X, y)
+            self.update_weights(X, layer1_delta, layer2_delta)
+            if verbose and i % 1000 == 0:
+                loss = np.mean(np.abs(y - self.layer2))
+                history.append(loss)
+                print(f"Epoch {i}, Loss: {loss}")
+        return history
+
+# Example usage
 def main():
-    inputs = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
-    outputs = np.array([[0], [1], [1], [0]])
-    np.random.seed(1)
-    hidden_dim = 2
-    num_iterations = 20000
-    learning_rate = 1
-    weights_layer1, weights_layer2 = train_network(inputs, outputs, hidden_dim, num_iterations, learning_rate)
-    layer1, layer2 = forward_pass(inputs, weights_layer1, weights_layer2)
+    # XOR dataset
+    X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+    y = np.array([[0], [1], [1], [0]])
+
+    nn = NeuralNetwork(input_dim=2, hidden_dim=4, output_dim=1, 
+                       activation='tanh', learning_rate=0.1, momentum=0.8)
+    nn.train(X, y, epochs=10000)
+    output = nn.forward(X)
     print("Final output:")
-    print(layer2)
+    print(np.round(output, 3))
 
 if __name__ == "__main__":
     main()
