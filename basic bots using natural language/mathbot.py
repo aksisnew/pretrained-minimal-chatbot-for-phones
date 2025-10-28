@@ -11,8 +11,38 @@ nltk.download('punkt', quiet=True)
 
 # Safe arithmetic evaluation
 operators = {
-    ast.Add: op.add, ast.Sub: op.sub, ast.Mult: op.mul,
-    ast.Div: op.truediv, ast.Pow: op.pow, ast.USub: op.neg
+    # Arithmetic
+    ast.Add: op.add,
+    ast.Sub: op.sub,
+    ast.Mult: op.mul,
+    ast.Div: op.truediv,
+    ast.FloorDiv: op.floordiv,
+    ast.Mod: op.mod,
+    ast.Pow: op.pow,
+
+    # Unary
+    ast.UAdd: op.pos,
+    ast.USub: op.neg,
+
+    # Bitwise (optional — remove if you don't want them)
+    ast.BitXor: op.xor,
+    ast.BitAnd: op.and_,
+    ast.BitOr: op.or_,
+    ast.Invert: op.invert,
+    ast.LShift: op.lshift,
+    ast.RShift: op.rshift,
+
+    # Comparisons (for evaluating logical statements)
+    ast.Eq: op.eq,
+    ast.NotEq: op.ne,
+    ast.Lt: op.lt,
+    ast.LtE: op.le,
+    ast.Gt: op.gt,
+    ast.GtE: op.ge,
+
+    # Boolean
+    ast.And: op.and_,
+    ast.Or: op.or_
 }
 
 def safe_eval(expr):
@@ -32,9 +62,33 @@ def safe_eval(expr):
         return None
 
 # Helper: convert trig input from degrees to radians
-def trig_in_degrees(func, x):
-    radians = math.radians(x)
-    return func(radians)
+def trig_in_degrees(func, x, decimals=8):
+    """
+    Computes a trigonometric function in degrees.
+    
+    Parameters:
+        func: math.sin, math.cos, math.tan, etc.
+        x: float or int (angle in degrees) or a list of angles
+        decimals: number of decimals to round the result
+
+    Returns:
+        float or list of floats
+    """
+    # Handle list input
+    if isinstance(x, (list, tuple)):
+        return [trig_in_degrees(func, angle, decimals) for angle in x]
+
+    # Validate input
+    try:
+        angle = float(x)
+    except (TypeError, ValueError):
+        raise ValueError(f"Invalid input for trigonometric calculation: {x}")
+
+    radians = math.radians(angle)
+    result = func(radians)
+
+    # Round to avoid floating point artifacts
+    return round(result, decimals)
 
 # Define math functions
 math_functions = {
@@ -109,17 +163,54 @@ def replace_constants(expr):
 
 # Define geometry functions
 geometry_functions = {
+    # --- Circle ---
     'area of circle': lambda r: math.pi * r ** 2,
     'circumference of circle': lambda r: 2 * math.pi * r,
+
+    # --- Rectangle / Square ---
     'area of rectangle': lambda l, w: l * w,
     'perimeter of rectangle': lambda l, w: 2 * (l + w),
+    'area of square': lambda a: a ** 2,
+    'perimeter of square': lambda a: 4 * a,
+
+    # --- Triangle ---
     'area of triangle': lambda b, h: 0.5 * b * h,
     'perimeter of triangle': lambda a, b, c: a + b + c,
+    'herons formula': lambda a, b, c: math.sqrt((a + b + c) / 2 * ((a + b + c) / 2 - a) * ((a + b + c) / 2 - b) * ((a + b + c) / 2 - c)),
+
+    # --- Sphere ---
     'volume of sphere': lambda r: (4 / 3) * math.pi * r ** 3,
     'surface area of sphere': lambda r: 4 * math.pi * r ** 2,
+
+    # --- Cylinder ---
     'volume of cylinder': lambda r, h: math.pi * r ** 2 * h,
     'surface area of cylinder': lambda r, h: 2 * math.pi * r * (r + h),
-    'pythagoras': lambda a, b: math.sqrt(a ** 2 + b ** 2)
+
+    # --- Cone ---
+    'volume of cone': lambda r, h: (1 / 3) * math.pi * r ** 2 * h,
+    'surface area of cone': lambda r, l: math.pi * r * (r + l),
+
+    # --- Cube ---
+    'volume of cube': lambda a: a ** 3,
+    'surface area of cube': lambda a: 6 * a ** 2,
+
+    # --- Rectangular Prism / Box ---
+    'volume of rectangular prism': lambda l, w, h: l * w * h,
+    'surface area of rectangular prism': lambda l, w, h: 2 * (l*w + w*h + h*l),
+
+    # --- Pythagoras ---
+    'pythagoras': lambda a, b: math.sqrt(a ** 2 + b ** 2),
+
+    # --- ADDED ---
+    'area of parallelogram': lambda b, h: b * h,
+'area of rhombus': lambda d1, d2: 0.5 * d1 * d2,
+'area of trapezium': lambda a, b, h: 0.5 * (a + b) * h,
+'area of polygon': lambda n, s: (n * s ** 2) / (4 * math.tan(math.pi / n)),
+
+
+    # --- Circle Sector / Segment ---
+    'area of sector': lambda r, angle: (angle / 360) * math.pi * r ** 2,
+    'arc length': lambda r, angle: (angle / 360) * 2 * math.pi * r
 }
 
 def process_input(input_str):
