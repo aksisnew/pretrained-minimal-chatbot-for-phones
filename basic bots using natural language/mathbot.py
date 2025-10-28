@@ -145,14 +145,35 @@ math_functions = {
     'degrees': math.degrees,
     'radians': math.radians,
     'sign': lambda x: (x > 0) - (x < 0),
+    'factorial': math.factorial,              # n!
+    'isqrt': math.isqrt,                      # Integer square root
+    'gcd': math.gcd,                          # Greatest common divisor
+    'lcm': lambda a, b: abs(a*b)//math.gcd(a,b),  # Least common multiple
+    'round': round,                            # Round to nearest integer or n decimals
+    'trunc': math.trunc,                       # Truncate decimal part
+    'copysign': math.copysign,                 # Copy the sign of one number to another
+    'fmod': math.fmod,                         # Modulus (floating point)
+    'modf': math.modf,                         # Fractional and integer parts
+    'exp2': lambda x: 2**x,                    # 2^x
+    'log2': math.log2,                         # log base 2
+    'log10': math.log10,                       # log base 10
+    'round2': lambda x, n=2: round(x, n),
     'hypot': math.hypot   # √(x² + y²)
 }
 
 # Define constants
 constants = {
-    'pi': math.pi,
-    'e': math.e,
-    'phi': (1 + math.sqrt(5)) / 2
+    'pi': math.pi,                        # 3.14159...
+    'e': math.e,                          # Euler's number
+    'phi': (1 + math.sqrt(5)) / 2,        # Golden ratio
+    'tau': math.tau,                      # 2 * pi
+    'sqrt2': math.sqrt(2),                # Square root of 2
+    'sqrt3': math.sqrt(3),                # Square root of 3
+    'gamma': 0.5772156649015328606,       # Euler–Mascheroni constant
+    'catalan': 0.915965594177219,         # Catalan's constant
+    'apery': 1.202056903159594,           # Apery's constant (zeta(3))
+    'euler': math.e,                       # Alias for e
+    'golden': (1 + math.sqrt(5)) / 2,      # Alias for phi
 }
 
 def replace_constants(expr):
