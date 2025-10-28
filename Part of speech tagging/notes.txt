@@ -1,0 +1,9 @@
+# Required Python Libraries for Advanced POS Tagger
+
+spacy               # NLP library for tokenization, tagging, parsing, and embeddings
+nltk                # Natural Language Toolkit for classic NLP and training custom taggers
+textblob            # Simple API for POS tagging and sentiment analysis
+
+pip install spacy nltk textblob
+python -m textblob.download_corpora
+python -m spacy download en_core_web_lg
