@@ -282,15 +282,33 @@ def process_input(input_str):
                 return f"Error while calculating {func_name}: {e}"
 
     # --- Check for arithmetic expressions ---
-    if re.search(r'[\+\-\*/\^]', input_str):
-        expr = input_str.replace('^', '**')  # allow ^ for power
+    # Check if the input looks like an arithmetic expression
+if re.search(r'[\+\-\*/\^]', input_str):
+    try:
+        # Replace ^ with ** for exponentiation
+        expr = input_str.replace('^', '**')
+        
+        # Evaluate safely
         result = safe_eval(expr)
+        
         if result is not None:
-            return f"The result is {result}"
+            responses = [
+                f"Got it! The answer is {result} ✅",
+                f"Crunching the numbers... Result: {result} 🧮",
+                f"Hmm, after calculating, I got {result}"
+            ]
+            return random.choice(responses)
         else:
-            return "Sorry, I couldn't evaluate that arithmetic expression."
+            return "Hmm, I couldn't calculate that. Could you check the expression?"
+    
+    except ZeroDivisionError:
+        return "Division by zero? That’s undefined! 😅"
+    except Exception:
+        return "Oops! Something went wrong while evaluating your expression."
+    
+# Default fallback
+return "Sorry, I didn't understand that. Could you rephrase it?"
 
-    return "Sorry, I didn't understand that."
 
 def main():
     greetings = [
