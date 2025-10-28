@@ -255,25 +255,61 @@ def process_input(input_str):
 
 def main():
     greetings = [
-        "Hey there! 👋 What math problem shall we tackle?",
-        "Hi! Ready to do some quick math?",
-        "Hello! Let’s solve something fun today.",
-        "Welcome! Got a math question for me?"
-    ]
+    "Hey there! 👋 What math problem shall we tackle?",
+    "Hi! Ready to do some quick math?",
+    "Hello! Let’s solve something fun today.",
+    "Welcome! Got a math question for me?",
+    "Yo! 😎 Time to crunch some numbers!",
+    "Greetings, math explorer! Ready to calculate?",
+    "Hiya! Let’s see what math magic we can do today.",
+    "Hello there! Numbers await your command!",
+    "Hey! Want to challenge me with some math?",
+    "Hi! Let’s turn those numbers into answers.",
+    "Salutations! Ready for some brain exercise?",
+    "Hey friend! Got a tricky math puzzle for me?",
+    "Howdy! Let’s tackle some numbers together.",
+    "Hi! Math awaits, and I’m here to help.",
+    "Hello! Let’s see what kind of math adventure we can go on today!"
+]
 
-    thinking = [
-        "Hmm... let me calculate that 🤔",
-        "Alright, crunching the numbers... 🧮",
-        "One sec, working it out...",
-        "Let’s see what the math says..."
-    ]
 
-    farewells = [
-        "Goodbye! Keep being awesome at math! 👋",
-        "See you later, math whiz! ✨",
-        "Bye! Don’t forget to challenge your brain again soon.",
-        "Take care! Numbers never sleep. 😄"
-    ]
+   thinking = [
+    "Hmm... let me calculate that 🤔",
+    "Alright, crunching the numbers... 🧮",
+    "One sec, working it out...",
+    "Let’s see what the math says...",
+    "Just a moment, let me figure this out... 🧐",
+    "Crunching some numbers in my head...",
+    "Hold on, running the calculations...",
+    "Thinking… numbers are aligning... 🔢",
+    "Let me solve this puzzle for you...",
+    "Working my math magic... ✨",
+    "Hmm… let’s see… carry the one…",
+    "Calculating… almost there…",
+    "Processing your math problem… ⚙️",
+    "Let me double-check my numbers…",
+    "Hmm, this looks interesting… solving now!"
+]
+
+
+   farewells = [
+    "Goodbye! Keep being awesome at math! 👋",
+    "See you later, math whiz! ✨",
+    "Bye! Don’t forget to challenge your brain again soon.",
+    "Take care! Numbers never sleep. 😄",
+    "Farewell! May your equations always balance.",
+    "Catch you later! Keep crunching those numbers.",
+    "Bye-bye! Hope your math adventures continue!",
+    "See ya! Remember, math is everywhere!",
+    "Adios! Keep solving and stay curious.",
+    "Goodbye! May your calculations always be correct.",
+    "Until next time! Don’t forget to have fun with math!",
+    "Bye! Keep those neurons firing! 🔥",
+    "Take it easy! Math will be waiting when you return.",
+    "See you soon! Keep exploring the world of numbers.",
+    "Goodbye! Stay sharp, math master! 🧠"
+]
+
 
     print(random.choice(greetings))
 
