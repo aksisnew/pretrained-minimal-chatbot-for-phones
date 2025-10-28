@@ -109,11 +109,23 @@ math_functions = {
     'sinh': math.sinh,
     'cosh': math.cosh,
     'tanh': math.tanh,
+    'asinh': math.asinh,   # Inverse hyperbolic sine
+    'acosh': math.acosh,   # Inverse hyperbolic cosine
+    'atanh': math.atanh,   # Inverse hyperbolic tangent
+    'coth': lambda x: 1 / math.tanh(x),     # Hyperbolic cotangent
+    'sech': lambda x: 1 / math.cosh(x),     # Hyperbolic secant
+    'csch': lambda x: 1 / math.sinh(x),
 
     # --- Inverse hyperbolic functions ---
-    'asinh': math.asinh,
-    'acosh': math.acosh,
-    'atanh': math.atanh,
+    'asinh': math.asinh,       # Inverse hyperbolic sine
+    'arcsinh': math.asinh,     # Alias
+    'acosh': math.acosh,       # Inverse hyperbolic cosine
+    'arccosh': math.acosh,     # Alias
+    'atanh': math.atanh,       # Inverse hyperbolic tangent
+    'arctanh': math.atanh,     # Alias
+    'acoth': lambda x: 0.5 * math.log((x + 1)/(x - 1)),  # Inverse hyperbolic cotangent
+    'asech': lambda x: math.log((1 + math.sqrt(1 - x**2))/x),  # Inverse hyperbolic secant
+    'acsch': lambda x: math.log(1/x + math.sqrt(1 + 1/x**2)),
 
     # --- Basic operations ---
     'sqrt': math.sqrt,
