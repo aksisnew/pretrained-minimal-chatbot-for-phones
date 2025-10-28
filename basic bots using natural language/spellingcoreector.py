@@ -3,14 +3,25 @@ from collections import Counter
 import numpy as np
 
 class SpellingCorrector:
-    def __init__(self, text):
-        self.text = text.lower()
-        self.words = re.findall(r'\b\w+\b', self.text)
+    def __init__(self, text, lowercase=True):
+        # Convert text to lowercase if desired
+        self.text = text.lower() if lowercase else text
+        
+        # Extract words (letters only)
+        self.words = re.findall(r'\b[a-z]+\b', self.text)
+        
+        # Count word frequencies
         self.word_counts = Counter(self.words)
-        self.total_words = len(self.words)
+        
+        # Total word count
+        self.total_words = sum(self.word_counts.values())
+        
+        # Laplace smoothing factor
+        self.smoothing = 1
 
     def probability(self, word):
-        return self.word_counts[word] / self.total_words
+        # Add smoothing to avoid zero probability
+        return (self.word_counts[word] + self.smoothing) / (self.total_words + self.smoothing * len(self.word_counts))
 
     def edit_distance(self, word1, word2):
         m, n = len(word1), len(word2)
@@ -29,7 +40,12 @@ class SpellingCorrector:
         return set(w for w in words if w in self.word_counts)
 
     def correct(self, word):
-        candidates = self.known([word]) or self.known(self.edits1(word)) or self.known(self.edits2(word)) or [word]
+        candidates = (
+            self.known([word]) or 
+            self.known(self.edits1(word)) or 
+            self.known(self.edits2(word)) or 
+            [word]
+        )
         return max(candidates, key=self.probability)
 
     def edits1(self, word):
@@ -44,19 +60,27 @@ class SpellingCorrector:
     def edits2(self, word):
         return set(e2 for e1 in self.edits1(word) for e2 in self.edits1(e1))
 
+
 def main():
+    # Load your corpus
     with open('corpus.txt', 'r') as f:
         text = f.read()
+    
     corrector = SpellingCorrector(text)
+    
+    print("Welcome to the Spelling Corrector! Type 'quit' to exit.")
     while True:
-        word = input("Enter a word (or type 'quit' to exit): ")
+        word = input("Enter a word: ").strip()
         if word.lower() == 'quit':
+            print("Goodbye! Keep spelling well! 👋")
             break
+        
         corrected_word = corrector.correct(word.lower())
         if word.lower() != corrected_word:
-            print(f"Did you mean '{corrected_word}'?")
+            print(f"Did you mean '{corrected_word}'? 🤔")
         else:
-            print("Word is spelled correctly.")
+            print("Word is spelled correctly! ✅")
+
 
 if __name__ == "__main__":
     main()
