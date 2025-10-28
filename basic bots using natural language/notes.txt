@@ -9,3 +9,8 @@
 -> ast
 -> operator as op
 -> random
+
+# Features to be added
+-> better and natural exception and error handelling.
+-> more robust natural language talking
+-> implementing this model in javascript version for web applications
