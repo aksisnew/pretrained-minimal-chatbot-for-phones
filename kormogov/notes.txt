@@ -1,0 +1,5 @@
+# Libraries needed to run kormogov in python
+nltk          # Tokenization, n-grams
+numpy         # Probabilities and array operations
+pandas        # Data handling, counting n-grams
+scipy         # Entropy calculation
